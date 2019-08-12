@@ -1,0 +1,23 @@
+{
+  "name": "@geekagency/metrics",
+  "version": "1.0.0",
+    "main": "index.js",
+  "scripts": {
+    "build": "rm -rf ./lib; node_modules/@babel/cli/bin/babel.js --out-dir lib ./src && node lib/index.js && cp package.json ./lib",
+    "build:raw": "rm -rf ./lib; cp -a ./src ./lib && node lib/index.js && cp package.json ./lib",
+    "pub": "cd ./lib;npm publish; cd ..",
+    "test": "npx jest --coverage && npx jest-coverage-badges"
+  },
+  "dependencies": {
+    "@geekagency/composite-js": "^0.0.11",
+    "@geekagency/redux-action-types": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "nodemon": "^1.19.1"
+  }
+}
