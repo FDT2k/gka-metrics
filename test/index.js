@@ -4,9 +4,9 @@ import {combineActionTypes} from '@geekagency/redux-action-types'
 import {store,increment,reset,debug_trace}  from '../src/store'
 
 //import {withKeys} from './store_handlers';
-import {withKeys as memoryMetricWithKeys  ,  KEYS as memoryKeys   } from './memoryMetric';
-import {withKeys as counterMetricWithKeys ,  KEYS as counterKeys  } from './counterMetric';
-import {withKeys as averageMetricWithKeys ,  KEYS as averageKeys  } from './averageMetric';
+import {withKeys as memoryMetricWithKeys  ,  KEYS as memoryKeys   } from '../src/memoryMetric';
+import {withKeys as counterMetricWithKeys ,  KEYS as counterKeys  } from '../src/counterMetric';
+import {withKeys as averageMetricWithKeys ,  KEYS as averageKeys  } from '../src/averageMetric';
 
 
 const KEYS = combineActionTypes(memoryKeys,counterKeys)

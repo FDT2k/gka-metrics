@@ -31,3 +31,5 @@ export const withKeys = keys => {
 
   return {memory_store,reset_heap,compute_memory,log_memory,memory}
 }
+
+export default ()=> withKeys(KEYS())

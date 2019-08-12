@@ -43,6 +43,6 @@ export const withKeys = keys =>{
   const average = compose(byIntervalOf2Sec(compute_and_log),collect_metric,average_store)
 
   return {average_store,reset_average,compute_average,log_average,average}
-
-
 }
+
+export default ()=> withKeys(KEYS())

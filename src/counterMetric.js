@@ -50,3 +50,5 @@ export const withKeys = keys =>{
   }
 
 }
+
+export default ()=> withKeys(KEYS())

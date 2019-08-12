@@ -55,3 +55,4 @@ export const withKeys = keys =>{
     byIntervalOf2Sec: makeIntervalOf(2000)
   }
 }
+export default ()=> withKeys(KEYS())

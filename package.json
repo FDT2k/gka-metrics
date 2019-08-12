@@ -6,7 +6,7 @@
     "build": "rm -rf ./lib; node_modules/@babel/cli/bin/babel.js --out-dir lib ./src && node lib/index.js && cp package.json ./lib",
     "build:raw": "rm -rf ./lib; cp -a ./src ./lib && node lib/index.js && cp package.json ./lib",
     "pub": "cd ./lib;npm publish; cd ..",
-    "test": "npx jest --coverage && npx jest-coverage-badges"
+    "test": "node_modules/@babel/node/bin/babel-node.js  -- test/index.js"
   },
   "dependencies": {
     "@geekagency/composite-js": "^0.0.11",
