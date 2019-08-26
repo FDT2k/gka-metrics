@@ -40,9 +40,19 @@ export const withKeys = keys =>{
   }
 
   const compute_and_log = compose(reset_interval,log_average,reset_count,compute_average)
-  const average = compose(byIntervalOf2Sec(compute_and_log),collect_metric,average_store)
 
-  return {average_store,reset_average,compute_average,log_average,average}
+  const average = compose(byIntervalOf2Sec(compute_and_log),collect_metric,average_store)
+  const averageWithCustomCollector = reducer=> collector=> compose(byIntervalOf2Sec(reducer),collector,average_store)
+
+  return {
+    compute_and_log,
+    average_store,
+    collect_metric,
+    reset_average,
+    compute_average,
+    log_average,average,
+    averageWithCustomCollector
+  }
 }
 
 export default ()=> withKeys(KEYS())

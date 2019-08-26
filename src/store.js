@@ -17,7 +17,7 @@ export const store = (initialStore)=>{
 /*
   Reset a value in the store
 */
-export const reset = key=> val=> store =>{
+export const reset = key => val=> store =>{
   let _val = (typeof val === 'function') ? val(store) : val;
   let {set,get } = store;
   set(key,_val)
@@ -28,6 +28,7 @@ export const reset = key=> val=> store =>{
 increment a value in the store
 */
 export const increment = key => reset(key)(store=>(store.get(key)+1))
+export const add = key => val => reset(key)(store=>(store.get(key)+val))
 
 /*holds execution if inspector enabled*/
 
