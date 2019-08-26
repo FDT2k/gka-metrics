@@ -11,6 +11,7 @@ export const KEYS = combineActionTypes(
   intervalKEYS,
   counterKeys,
   'AVERAGE'
+  
 )
 
 export const withKeys = keys =>{

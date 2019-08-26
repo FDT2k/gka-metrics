@@ -1,6 +1,8 @@
 import {combineActionTypes} from '@geekagency/redux-action-types'
 
-import {compose,trace} from '@geekagency/composite-js'
+import {compose,trace,curry} from '@geekagency/composite-js'
+import * as C from '@geekagency/composite-js/Combinator'
+const {asFunctionPropFromProp:asF} = C;
 import {store,reset} from './store'
 
 export const KEYS= combineActionTypes(
@@ -9,50 +11,54 @@ export const KEYS= combineActionTypes(
   'NOW'
 )
 
-export const withKeys = keys =>{
 
-  const init_store = (store)=>{
-    let now = Date.now();
-    let {get,set} = store
-    if(!get(keys.DATE_STARTED))
-      set(keys.DATE_STARTED,now);
+export const init_store = curry((keys,store) => {
+  let now = Date.now();
+  let {get,set} = store
+  if(!get(keys.DATE_STARTED))
+    set(keys.DATE_STARTED,now);
 
-    if(!get(keys.LAST_INTERVAL))
-      set(keys.LAST_INTERVAL,now)
+  if(!get(keys.LAST_INTERVAL))
+    set(keys.LAST_INTERVAL,now)
 
-    set(keys.NOW,now)
+  set(keys.NOW,now)
 
-    return store;
+  return store;
+})
+
+export const runAfterInterval = keys => fn => interval => store => {
+  let {get,set} = store;
+  let elapsed= get(keys.NOW) - get(keys.LAST_INTERVAL)
+  if( elapsed >= interval){
+    store = fn(store)
   }
-
-  // run FN if elapsedTime >= interval.
-
-  const runAfterInterval = FN => interval => store => {
-    let {get,set} = store;
-    let elapsed= get(keys.NOW) - get(keys.LAST_INTERVAL)
-    if( elapsed >= interval){
-      store = FN(store)
-    }
-    return store;
-  }
-
-
-  const interval_store = compose(init_store,store)
-
-  const reset_interval = reset(keys.LAST_INTERVAL)(store=> store.get(keys.NOW))
-
-  /*run FN after interval but wit */
-  const makeIntervalOf = interval => fn => {
-    return runAfterInterval(fn)(interval);
-  }
-
-  return {
-    init_store,
-    interval_store,
-    reset_interval,
-    runAfterInterval,
-    makeIntervalOf,
-    byIntervalOf2Sec: makeIntervalOf(2000)
-  }
+  return store;
 }
-export default ()=> withKeys(KEYS())
+
+export const makeIntervalOf = keys=> interval => fn => {
+  return runAfterInterval(keys)(fn)(interval);
+}
+
+export const reset = keys => reset(keys.LAST_INTERVAL)(store=> store.get(keys.NOW))
+
+// apply the keys as an enhancer
+// accepts both combinator or object
+export const withKeys = keys => fn => args => {
+  let _keys = keys;
+
+  if(c.is_type_function(keys))  //accepting function or combinator as well
+      _keys = keys();
+
+  return fn(keys)(...args);
+
+}
+
+export const interval = combineObject(
+  asF({init_store}),
+  asF({runAfterInterval}),
+  asF({makeIntervalOf}),
+  asF({reset})
+)
+
+
+export default ()=> interval(withKeys(KEYS))

@@ -1,0 +1,16 @@
+{
+  "project_name": "gka-metrics",
+  "services": [
+
+    {
+      "path": "",
+      "registry_key": "",
+      "recipes": [
+        "/home/fabien/Documents/work/gka-ms-catalog/src/recipes/package_json/babel-node-build",
+        "/home/fabien/Documents/work/gka-ms-catalog/src/recipes/package_json/jest-es6"
+      ]
+
+    }
+  ]
+
+}

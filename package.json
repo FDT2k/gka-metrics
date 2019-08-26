@@ -1,23 +1,53 @@
 {
-  "name": "@geekagency/metrics",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "rm -rf ./lib; node_modules/@babel/cli/bin/babel.js --out-dir lib ./src && node lib/index.js && cp package.json ./lib",
-    "build:raw": "rm -rf ./lib; cp -a ./src ./lib && node lib/index.js && cp package.json ./lib",
-    "pub": "cd ./lib;npm publish; cd ..",
-    "test": "node_modules/@babel/node/bin/babel-node.js  -- test/index.js"
-  },
-  "dependencies": {
-    "@geekagency/composite-js": "^0.0.11",
-    "@geekagency/redux-action-types": "^1.0.5"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-es2015": "^7.0.0-beta.53",
-    "nodemon": "^1.19.1"
-  }
+	"name": "@geekagency/metrics",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"build": "npm run test && node_modules/@babel/cli/bin/babel.js --out-dir lib ./src && cp package.json ./lib",
+		"build:raw": "rm -rf ./lib; cp -a ./src ./lib && node lib/index.js && cp package.json ./lib",
+		"pub": "cd ./lib;npm publish; cd ..",
+		"test:jest": "npx jest",
+		"test:jest:watch": "npx jest --watch",
+		"distclean": "rm -rf ./lib",
+		"build:clean": "npm run distclean; npm run build",
+		"build:pub": "npm run build && npm run pub",
+		"build:patch:pub": "npm run build && npm version patch && npm run pub",
+		"build:minor:pub": "npm run build && npm version minor && npm run pub",
+		"build:major:pub": "npm run build && npm version major && npm run pub",
+		"test": "npm run test:jest"
+	},
+	"dependencies": {
+		"@geekagency/composite-js": "^0.4.5",
+		"@geekagency/redux-action-types": "^1.0.5"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.4.4",
+		"@babel/core": "^7.4.5",
+		"@babel/node": "^7.5.0",
+		"@babel/preset-env": "^7.4.5",
+		"@babel/preset-es2015": "^7.0.0-beta.53",
+		"nodemon": "^1.19.1",
+		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
+		"babel-eslint": "^10.0.2",
+		"babel-jest": "^24.9.0",
+		"babel-plugin-lodash": "^3.3.4",
+		"babel-preset-minify": "^0.5.0",
+		"eslint": "^5.16.0",
+		"jest": "^24.8.0",
+		"jest-coverage-badges": "^1.1.2"
+	},
+	"jest": {
+		"transform": {
+			".*": "<rootDir>/node_modules/babel-jest"
+		},
+		"moduleFileExtensions": [
+			"js",
+			"es6"
+		],
+		"coverageReporters": [
+			"json-summary",
+			"text",
+			"lcov"
+		]
+	}
 }
