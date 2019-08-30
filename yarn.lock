@@ -1102,23 +1102,17 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@geekagency/composite-js@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@geekagency/composite-js/-/composite-js-0.0.6.tgz#5dfa93106fc93e59721318ed024b6f32a96b23ca"
-  integrity sha512-/bYFUxnofyc6k7VvY75z84OfhyDJjWsucWkPo9qoyPuUiHDjsxij6q+o5oopsOE8pxpQa/5AK9CQQhV/PKp0LQ==
-
-"@geekagency/composite-js@^0.4.5":
+"@geekagency/composite-js@^0.4.3", "@geekagency/composite-js@^0.4.5":
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/@geekagency/composite-js/-/composite-js-0.4.5.tgz#5bd693f2f19f501a6b3edf319e16c0937c8fb57f"
   integrity sha512-y8F/QB2DJFYdjsgRNvZsbPVbrfomnV9CXOWXO/Rx4N4aQP/mdZD51WLStGFmN97G8Qr9XRAmvVIWmspMg+sNmg==
 
-"@geekagency/redux-action-types@^1.0.0", "@geekagency/redux-action-types@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@geekagency/redux-action-types/-/redux-action-types-1.0.5.tgz#f7c1bf1fb0a57c7a9173fc1ae037c4e81fd46072"
-  integrity sha512-3DYWHqhJnLu2v81EnowqOBQ8Dk1zmHWIBYQC6LQ3uV33UbTXvtnzD3/82i0K9iAyj83cuGy/SmTnkwio2dAPyQ==
+"@geekagency/redux-action-types@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@geekagency/redux-action-types/-/redux-action-types-1.4.0.tgz#16eb0b772b9408e6a4afa8fffebd12faf95087c7"
+  integrity sha512-zpNXGeL8G0vBws+J+PgxiBYiWB8LOBt1qeJ1UTSZvvUiLpz+K3yKyeDTure6jAg40CMLmSIEZLsNAylZrIYvJg==
   dependencies:
-    "@geekagency/composite-js" "^0.0.6"
-    "@geekagency/redux-action-types" "^1.0.0"
+    "@geekagency/composite-js" "^0.4.3"
     core-js "^3.1.4"
     core-js-pure "^3.1.4"
 

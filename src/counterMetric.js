@@ -1,54 +1,71 @@
-import {combineActionTypes} from '@geekagency/redux-action-types'
+import * as CAT       from  '@geekagency/redux-action-types'
+import * as c         from  '@geekagency/composite-js'
+import * as C from '@geekagency/composite-js/Combinator'
+import * as S         from  './store'
+import * as Interval  from  './intervalMetric'
+import {withKeys,composeMetric} from './utils'
 
-import {compose,trace} from '@geekagency/composite-js'
-import {store,reset,increment} from './store'
-import {withKeys as makeIntervalMetric, KEYS as intervalKEYS } from './intervalMetric'
+const {asFunctionPropFromProp:asFP, asFunctionProp: asF} = C;
 
 
-export const KEYS = combineActionTypes(
+export const KEYS = CAT.combineActionTypes(
   'COUNTER',
   'LAST_COUNTER',
-  intervalKEYS
+  CAT.groupAs('interval')(Interval.KEYS)
 )
 
-export const withKeys = keys =>{
+export const init_store_count = keys=>  (store)=>{
 
-  let {reset_interval,runAfterInterval,interval_store} = makeIntervalMetric(keys);
+  let {get,set}=store
+  if(!get(keys.COUNTER))
+    set(keys.COUNTER,0)
+  return store;
+}
 
+export const init_store =  keys => other_stores=> {
+  console.log('keys',keys,'store',other_stores)
 
-  const init_store_count =  (store)=>{
-    let {get,set}=store
-    if(!get(keys.COUNTER))
-      set(keys.COUNTER,0)
-    return store;
-  }
+  return c.compose(init_store_count,other_stores)(keys)
+}
 
-  const count_store = compose(init_store_count,interval_store,store)
+export const reset        = keys => S.reset (keys.COUNTER)(0)
 
-  const reset_count =  reset (keys.COUNTER)(0)
+export const reducer      = keys => store=>{
 
-  const compute_counter = store=>{
-    let {get,set}=store;
-    let count = get(keys.COUNTER)
-    console.log('counter ',count, `(+${count-get(keys.LAST_COUNTER)})`)
-    set(keys.LAST_COUNTER,count)
-    return store
-
-  }
-
-  const log_count = compose(reset_interval,compute_counter)
-
-  const counter= compose(runAfterInterval(log_count)(2000),increment(keys.COUNTER),count_store)
-
-  return {
-    init_store_count,
-    count_store,
-    reset_count,
-    compute_counter,
-    log_count,
-    counter
-  }
+  let {get,set}=store;
+  let count = get(keys.COUNTER)
+  //console.log('counter ',count, `(+${count-get(keys.LAST_COUNTER)})`)
+  set(keys.COUNTER_DIFF,count-get(keys.LAST_COUNTER))
+  set(keys.LAST_COUNTER,count)
+  return store
 
 }
 
-export default ()=> withKeys(KEYS())
+
+export const collect = keys=>store => S.increment(keys.COUNTER)
+
+export const log = keys=> store=>console.log('counter ',get(keys.LAST_COUNTER), `(+${get(keys.COUNTER_DIFF)})`)
+
+export const reduce_and_log = other_resets =>  c.compose(other_resets,log,reducer)
+export const reduce = other_resets =>  c.compose(other_resets,reducer)
+
+export const makeModule = keys => {
+  let interval = Interval.interval(keys);
+
+  return C.combineObject(
+    asF('init_store',init_store(interval.init_store)),
+    asFP({reset}),
+    asFP({reducer}),
+    asFP({reduce}),
+    asF('reduce_and_log',reduce_and_log(interval.reset)),
+    asFP({composeMetric}),
+    asFP({collect})
+  )(keys)
+}
+
+
+
+export const defaultCounterModule = c.compose(makeModule,withKeys)
+
+
+export const counterOnInterval = keys => delay => reduce=>  compose(runAfterInterval(reduce)(delay),increment(keys.COUNTER),count_store)
